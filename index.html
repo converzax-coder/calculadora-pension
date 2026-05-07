@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de liquidación de pensión de vejez | Colombia</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --ink: #172033;
+      --muted: #64748b;
+      --line: #dbe3ef;
+      --primary: #0f766e;
+      --primary-dark: #0b5f46;
+      --primary-soft: #e9f8f2;
+      --accent: #047857;
+      --warning: #9a6700;
+      --warning-bg: #fff7df;
+      --danger: #b42318;
+      --danger-bg: #fff0ee;
+      --success-bg: #e9f8f2;
+      --shadow: 0 18px 45px rgba(20, 34, 63, 0.12);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(15, 118, 110, 0.16), transparent 34%),
+        linear-gradient(180deg, #f7faff 0%, var(--bg) 52%, #edf3fa 100%);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 54px;
+    }
+
+    header.hero {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 24px;
+      align-items: stretch;
+      margin-bottom: 24px;
+    }
+
+    .hero-main,
+    .hero-note,
+    .panel,
+    .result-card,
+    .law-box {
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(219, 227, 239, 0.9);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-main {
+      padding: 34px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      width: 230px;
+      height: 230px;
+      border-radius: 999px;
+      background: rgba(15, 118, 110, 0.10);
+      right: -72px;
+      top: -82px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(30px, 4.5vw, 54px);
+      line-height: 0.98;
+      letter-spacing: -0.045em;
+      max-width: 850px;
+    }
+
+    .subtitle {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.6;
+      max-width: 760px;
+    }
+
+    .hero-note {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .note-title {
+      font-weight: 800;
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .note-text {
+      color: var(--muted);
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .advisor-message {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #064e3b, #0f766e 55%, #10b981);
+      color: #ffffff;
+      box-shadow: 0 16px 35px rgba(15, 118, 110, 0.24);
+    }
+
+    .advisor-message strong {
+      display: block;
+      font-size: 18px;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .advisor-message p {
+      margin: 0;
+      line-height: 1.45;
+      opacity: 0.94;
+      font-size: 14px;
+    }
+
+    .advisor-contact {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+
+    .advisor-contact:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.24);
+    }
+
+    .gender-note {
+      margin-top: 10px !important;
+      font-weight: 800;
+      opacity: 1 !important;
+    }
+
+    .tag {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      color: #334155;
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    main.calculator {
+      display: grid;
+      grid-template-columns: 0.96fr 1.04fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 24px;
+    }
+
+    .panel h2,
+    .result-card h2,
+    .law-box h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+
+    .panel-description {
+      color: var(--muted);
+      line-height: 1.55;
+      margin: 0 0 22px;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    label {
+      font-weight: 800;
+      font-size: 14px;
+      color: #243045;
+    }
+
+    input,
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      padding: 14px 14px;
+      font-size: 16px;
+      color: var(--ink);
+      background: #ffffff;
+      outline: none;
+      transition: border 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.14);
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.45;
+    }
+
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .checkbox-line {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fbfdff;
+    }
+
+    .checkbox-line input {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--primary);
+    }
+
+    .checkbox-line label {
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      font-size: 15px;
+    }
+
+    button:hover { transform: translateY(-1px); }
+
+    .primary-btn {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 12px 24px rgba(15, 118, 110, 0.25);
+    }
+
+    .primary-btn:hover { background: var(--primary-dark); }
+
+    .ghost-btn {
+      background: #eef4fb;
+      color: #20304a;
+      border: 1px solid var(--line);
+    }
+
+    .results-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .result-card {
+      padding: 24px;
+    }
+
+    .status {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 16px;
+      margin: 16px 0;
+      line-height: 1.5;
+      font-weight: 700;
+    }
+
+    .status.success { background: var(--success-bg); color: #0b5f46; }
+    .status.warning { background: var(--warning-bg); color: var(--warning); }
+    .status.danger { background: var(--danger-bg); color: var(--danger); }
+
+    .status-card {
+      margin: 16px 0;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: #fbfdff;
+      padding: 16px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .status-card span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .status-card strong {
+      font-size: 23px;
+      letter-spacing: -0.025em;
+    }
+
+    .status-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 14px;
+    }
+
+    .big-number {
+      display: grid;
+      gap: 5px;
+      padding: 20px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #064e3b, #0f766e 58%, #10b981);
+      color: white;
+      box-shadow: 0 16px 35px rgba(15, 118, 110, 0.26);
+      margin: 16px 0;
+    }
+
+    .retroactive-number {
+      background: linear-gradient(135deg, #065f46, #047857 58%, #34d399);
+      box-shadow: 0 16px 35px rgba(15, 118, 110, 0.24);
+    }
+
+    .mini-disclaimer {
+      margin: 14px 0 0;
+      padding: 13px 15px;
+      border-radius: 16px;
+      background: #fff7df;
+      border: 1px solid #f4d88b;
+      color: #755000;
+      line-height: 1.5;
+      font-size: 13.5px;
+      font-weight: 650;
+    }
+
+    .big-number span {
+      font-size: 13px;
+      opacity: 0.88;
+      font-weight: 700;
+    }
+
+    .big-number strong {
+      font-size: clamp(28px, 5vw, 44px);
+      letter-spacing: -0.045em;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      background: #fbfdff;
+      border-radius: 18px;
+      padding: 14px;
+      min-height: 96px;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 22px;
+      letter-spacing: -0.025em;
+    }
+
+    .metric small {
+      display: block;
+      color: var(--muted);
+      margin-top: 5px;
+      line-height: 1.35;
+    }
+
+    .breakdown {
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .breakdown-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      padding: 13px 15px;
+      border-bottom: 1px solid var(--line);
+      align-items: center;
+    }
+
+    .breakdown-row:last-child { border-bottom: 0; }
+
+    .breakdown-row span:first-child {
+      color: #334155;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .breakdown-row span:last-child {
+      font-weight: 900;
+      text-align: right;
+      color: #172033;
+    }
+
+    .law-box {
+      padding: 24px;
+      margin-top: 24px;
+    }
+
+    .law-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .law-item {
+      background: #fbfdff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .law-item strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .law-item p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 13px;
+    }
+
+    .footer-warning {
+      margin-top: 22px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #fff7df;
+      border: 1px solid #f4d88b;
+      color: #755000;
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .hidden { display: none; }
+
+    @media (max-width: 1000px) {
+      .law-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 880px) {
+      header.hero,
+      main.calculator {
+        grid-template-columns: 1fr;
+      }
+
+      .row-2,
+      .metrics,
+      .law-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-main { padding: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <section class="hero-main">
+        <div class="eyebrow">Colombia · Ley 100 de 1993 / Ley 797 de 2003 / Sentencia C-197 de 2023</div>
+        <h1>Calculadora de liquidación de pensión de vejez</h1>
+        <p class="subtitle">
+          Estima la mesada pensional, verifica el cumplimiento de edad y semanas, calcula un retroactivo aproximado entre la fecha de estatus y la fecha de efectividad, y aplica la reducción gradual de semanas para mujeres ordenada por la Sentencia C-197 de 2023.
+        </p>
+      </section>
+
+      <aside class="hero-note">
+        <div>
+          <div class="note-title">Uso recomendado</div>
+          <p class="note-text">
+            Ingresa edad, sexo, IBL, semanas cotizadas y salario mínimo vigente. La herramienta muestra el estatus pensional y el cálculo paso a paso.
+          </p>
+          <div class="advisor-message">
+            <strong>¿Necesitas asesoría para el reconocimiento o reliquidación de tu pensión o de tu indemnización?</strong>
+            <p>Revisa tu caso con acompañamiento especializado antes de presentar solicitudes, reclamaciones o recursos.</p>
+            <p class="gender-note">Asesorías con perspectiva de género.</p>
+            <a class="advisor-contact" href="https://wa.me/573167620709" target="_blank" rel="noopener noreferrer">Contáctanos: +57 316 7620709</a>
+          </div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">Edad</span>
+          <span class="tag">IBL</span>
+          <span class="tag">Semanas</span>
+          <span class="tag">C-197/2023</span>
+          <span class="tag">Pensión mínima</span>
+          <span class="tag">Retroactivo</span>
+          <span class="tag">Prescripción 3 años</span>
+        </div>
+      </aside>
+    </header>
+
+    <main class="calculator">
+      <section class="panel">
+        <h2>Datos para el cálculo</h2>
+        <p class="panel-description">
+          La regla “desde 2004” usa la fórmula r = 65.50 - 0.50s y el incremento de 1.5% por cada 50 semanas adicionales a las mínimas requeridas.
+        </p>
+
+        <form id="pensionForm" class="form-grid">
+          <div class="field">
+            <label for="regla">Regla normativa</label>
+            <select id="regla">
+              <option value="797" selected>Ley 797 de 2003 · Regla aplicable desde 2004</option>
+              <option value="100">Ley 100 de 1993 · Regla histórica de 1.000 a 1.400 semanas</option>
+            </select>
+            <div class="hint">Elige la regla que quieres simular. Esta página no define régimen de transición.</div>
+          </div>
+
+          <div id="yearField" class="field">
+            <label for="year">Año de causación o reconocimiento</label>
+            <input id="year" type="number" min="2004" max="2100" step="1" value="2026" />
+            <div class="hint">Sirve para determinar las semanas mínimas y aplicar, cuando corresponda, la reducción gradual de la Sentencia C-197 de 2023.</div>
+          </div>
+
+          <div class="row-2">
+            <div class="field">
+              <label for="sex">Sexo para edad y semanas</label>
+              <select id="sex">
+                <option value="mujer" selected>Mujer</option>
+                <option value="hombre">Hombre</option>
+              </select>
+              <div class="hint">En el régimen de prima media: 57 años para mujeres y 62 años para hombres.</div>
+            </div>
+
+            <div class="field">
+              <label for="age">Edad cumplida</label>
+              <input id="age" type="number" min="0" max="120" step="1" value="57" />
+              <div class="hint">Se usa para determinar si ya se causa el derecho por edad.</div>
+            </div>
+          </div>
+
+          <div class="row-2">
+            <div class="field">
+              <label for="ibl">Ingreso Base de Liquidación - IBL</label>
+              <input id="ibl" type="text" inputmode="numeric" value="3500000" />
+              <div class="hint">Valor mensual en pesos colombianos.</div>
+            </div>
+
+            <div class="field">
+              <label for="smmlv">SMMLV del año de referencia</label>
+              <input id="smmlv" type="text" inputmode="numeric" value="1750905" />
+              <div class="hint">Para 2026 se deja precargado $1.750.905. Puedes cambiarlo.</div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="weeks">Total de semanas cotizadas</label>
+            <input id="weeks" type="number" min="0" step="1" value="1250" />
+            <div class="hint">El incremento de la mesada solo cuenta por bloques completos de 50 semanas adicionales.</div>
+          </div>
+
+          <div class="row-2">
+            <div class="field">
+              <label for="statusDate">Fecha de estatus pensional</label>
+              <input id="statusDate" type="date" value="2026-01-01" />
+              <div class="hint">Fecha desde la cual la persona cumple edad y semanas. Desde aquí se estima el retroactivo.</div>
+            </div>
+
+            <div class="field">
+              <label for="effectiveDate">Fecha de efectividad o pago</label>
+              <input id="effectiveDate" type="date" value="2026-05-07" />
+              <div class="hint">Fecha hasta la cual se liquida el retroactivo estimado. Puede ser reconocimiento, inclusión en nómina o pago efectivo, según el caso.</div>
+            </div>
+          </div>
+
+          <div class="checkbox-line">
+            <input id="applyPrescription" type="checkbox" checked />
+            <div>
+              <label for="applyPrescription">Aplicar prescripción de 3 años al retroactivo</label>
+              <div class="hint">Si la fecha de estatus supera los 3 años hacia atrás desde la fecha de efectividad, el cálculo limita el retroactivo a los últimos 36 meses.</div>
+            </div>
+          </div>
+
+          <div class="checkbox-line" id="c197Box">
+            <input id="applyC197" type="checkbox" checked />
+            <div>
+              <label for="applyC197">Aplicar Sentencia C-197 de 2023 para mujeres</label>
+              <div class="hint">Desde 2026 reduce las semanas mínimas: 1.250 en 2026 y luego 25 menos cada año hasta llegar a 1.000.</div>
+            </div>
+          </div>
+
+          <div class="checkbox-line">
+            <input id="applyMinimum" type="checkbox" checked />
+            <div>
+              <label for="applyMinimum">Aplicar pensión mínima</label>
+              <div class="hint">Si la mesada estimada queda por debajo de 1 SMMLV, se ajusta al salario mínimo indicado.</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="primary-btn">Calcular pensión</button>
+            <button type="button" id="resetBtn" class="ghost-btn">Limpiar ejemplo</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="results-stack">
+        <div class="result-card">
+          <h2>Resultado estimado</h2>
+          <div id="statusBox" class="status warning">Ingresa los datos y presiona calcular.</div>
+
+          <div class="status-card">
+            <span>Estatus pensional</span>
+            <strong id="pensionStatus">Pendiente de cálculo</strong>
+            <p id="pensionStatusNote">Aquí se indicará si la persona cumple edad y semanas para causar el derecho a la pensión de vejez.</p>
+          </div>
+
+          <div class="big-number">
+            <span>Mesada pensional estimada</span>
+            <strong id="finalPension">$0</strong>
+          </div>
+
+          <div class="big-number retroactive-number">
+            <span>Retroactivo pensional estimado</span>
+            <strong id="finalRetroactive">$0</strong>
+          </div>
+
+          <div class="mini-disclaimer" id="retroactiveDisclaimer">
+            El retroactivo es una aproximación. Puede variar por fecha exacta de causación, efectividad del acto, inclusión en nómina, mesadas adicionales, descuentos, aportes a salud, intereses, prescripción o revisión de la historia laboral.
+          </div>
+
+          <div class="metrics">
+            <div class="metric">
+              <span>Porcentaje aplicado</span>
+              <strong id="finalRate">0%</strong>
+              <small id="rateNote">Tasa final después de topes.</small>
+            </div>
+            <div class="metric">
+              <span>Semanas mínimas</span>
+              <strong id="minimumWeeks">0</strong>
+              <small id="minimumWeeksNote">Según la regla seleccionada.</small>
+            </div>
+            <div class="metric">
+              <span>Edad requerida</span>
+              <strong id="requiredAge">0</strong>
+              <small id="ageNote">Según sexo seleccionado.</small>
+            </div>
+            <div class="metric">
+              <span>IBL en salarios mínimos</span>
+              <strong id="sValue">0</strong>
+              <small>s = IBL / SMMLV.</small>
+            </div>
+            <div class="metric">
+              <span>Incremento por semanas</span>
+              <strong id="incrementRate">0%</strong>
+              <small id="blocksNote">Bloques completos de 50 semanas.</small>
+            </div>
+            <div class="metric">
+              <span>Semanas faltantes</span>
+              <strong id="missingWeeksMetric">0</strong>
+              <small id="missingWeeksNote">Para cumplir el requisito de semanas.</small>
+            </div>
+            <div class="metric">
+              <span>Periodo retroactivo</span>
+              <strong id="retroactivePeriod">0 meses</strong>
+              <small id="retroactivePeriodNote">Desde estatus hasta efectividad.</small>
+            </div>
+            <div class="metric">
+              <span>Prescripción</span>
+              <strong id="prescriptionStatus">No aplicada</strong>
+              <small id="prescriptionNote">Regla de 3 años para limitar el retroactivo.</small>
+            </div>
+          </div>
+
+          <div class="breakdown" id="breakdown"></div>
+        </div>
+      </section>
+    </main>
+
+    <section class="law-box">
+      <h2>Reglas implementadas</h2>
+      <div class="law-grid">
+        <article class="law-item">
+          <strong>Ley 100 de 1993</strong>
+          <p>65% del IBL por las primeras 1.000 semanas; aumentos de 2% por cada 50 semanas hasta 1.200; luego 3% hasta 1.400; máximo 85%.</p>
+        </article>
+        <article class="law-item">
+          <strong>Ley 797 de 2003</strong>
+          <p>Desde 2004, porcentaje base decreciente: r = 65.50 - 0.50s, donde s equivale al número de salarios mínimos contenidos en el IBL.</p>
+        </article>
+        <article class="law-item">
+          <strong>Edad y semanas</strong>
+          <p>El estatus de cumplimiento se verifica con edad mínima y semanas mínimas. En la simulación se usa 57 años para mujeres y 62 para hombres.</p>
+        </article>
+        <article class="law-item">
+          <strong>Sentencia C-197 de 2023</strong>
+          <p>Para mujeres en RPM, desde 2026 la exigencia baja a 1.250 semanas y desde 2027 disminuye 25 semanas por año hasta llegar a 1.000.</p>
+        </article>
+        <article class="law-item">
+          <strong>Retroactivo pensional</strong>
+          <p>Se estima desde la fecha de estatus pensional hasta la fecha de efectividad o pago indicada por el usuario.</p>
+        </article>
+        <article class="law-item">
+          <strong>Prescripción trienal</strong>
+          <p>Si se activa, el retroactivo se limita a los últimos 3 años contados hacia atrás desde la fecha de efectividad.</p>
+        </article>
+      </div>
+      <div class="footer-warning">
+        Esta herramienta es una simulación pedagógica. No valida régimen de transición, historia laboral real, semanas en diferentes regímenes, bonos pensionales, régimen de ahorro individual, reforma pensional, hijos, beneficios especiales ni reglas exceptuadas. La reducción de la Sentencia C-197 de 2023 se modela para mujeres en el régimen de prima media y bajo el supuesto de aplicación gradual desde 2026. El retroactivo es aproximado y puede variar por la fecha exacta de estatus, fecha de efectividad, prescripción, mesadas adicionales, descuentos de salud, intereses, novedades administrativas o decisión judicial. Si existe prescripción de 3 años, el valor cambia porque no se reconocerían todos los periodos causados antes del límite prescriptivo. Para una liquidación oficial se debe revisar la historia laboral, el acto administrativo y el régimen aplicable.
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const form = document.getElementById('pensionForm');
+    const regla = document.getElementById('regla');
+    const yearField = document.getElementById('yearField');
+    const yearInput = document.getElementById('year');
+    const sexInput = document.getElementById('sex');
+    const ageInput = document.getElementById('age');
+    const iblInput = document.getElementById('ibl');
+    const smmlvInput = document.getElementById('smmlv');
+    const weeksInput = document.getElementById('weeks');
+    const statusDateInput = document.getElementById('statusDate');
+    const effectiveDateInput = document.getElementById('effectiveDate');
+    const applyPrescriptionInput = document.getElementById('applyPrescription');
+    const applyC197Input = document.getElementById('applyC197');
+    const applyMinimumInput = document.getElementById('applyMinimum');
+    const resetBtn = document.getElementById('resetBtn');
+
+    const statusBox = document.getElementById('statusBox');
+    const pensionStatus = document.getElementById('pensionStatus');
+    const pensionStatusNote = document.getElementById('pensionStatusNote');
+    const finalPension = document.getElementById('finalPension');
+    const finalRetroactive = document.getElementById('finalRetroactive');
+    const retroactiveDisclaimer = document.getElementById('retroactiveDisclaimer');
+    const finalRate = document.getElementById('finalRate');
+    const minimumWeeks = document.getElementById('minimumWeeks');
+    const minimumWeeksNote = document.getElementById('minimumWeeksNote');
+    const requiredAge = document.getElementById('requiredAge');
+    const ageNote = document.getElementById('ageNote');
+    const sValue = document.getElementById('sValue');
+    const incrementRate = document.getElementById('incrementRate');
+    const blocksNote = document.getElementById('blocksNote');
+    const rateNote = document.getElementById('rateNote');
+    const missingWeeksMetric = document.getElementById('missingWeeksMetric');
+    const missingWeeksNote = document.getElementById('missingWeeksNote');
+    const retroactivePeriod = document.getElementById('retroactivePeriod');
+    const retroactivePeriodNote = document.getElementById('retroactivePeriodNote');
+    const prescriptionStatus = document.getElementById('prescriptionStatus');
+    const prescriptionNote = document.getElementById('prescriptionNote');
+    const breakdown = document.getElementById('breakdown');
+
+    const moneyFormatter = new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      maximumFractionDigits: 0
+    });
+
+    const numberFormatter = new Intl.NumberFormat('es-CO', {
+      maximumFractionDigits: 2
+    });
+
+    const integerFormatter = new Intl.NumberFormat('es-CO', {
+      maximumFractionDigits: 0
+    });
+
+    function cleanMoney(value) {
+      return Number(String(value).replace(/[^0-9]/g, '')) || 0;
+    }
+
+    function formatMoneyInput(input) {
+      const value = cleanMoney(input.value);
+      input.value = value ? new Intl.NumberFormat('es-CO').format(value) : '';
+    }
+
+    function parseDateInput(value) {
+      if (!value) return null;
+      const parts = value.split('-').map(Number);
+      if (parts.length !== 3 || parts.some(Number.isNaN)) return null;
+      return new Date(parts[0], parts[1] - 1, parts[2]);
+    }
+
+    function formatDate(date) {
+      return new Intl.DateTimeFormat('es-CO', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }).format(date);
+    }
+
+    function subtractYears(date, years) {
+      const copy = new Date(date);
+      copy.setFullYear(copy.getFullYear() - years);
+      return copy;
+    }
+
+    function diffDays(start, end) {
+      const msPerDay = 1000 * 60 * 60 * 24;
+      return Math.max(0, Math.round((end - start) / msPerDay));
+    }
+
+    function calculateRetroactive(monthlyPension, statusDateValue, effectiveDateValue, applyPrescription) {
+      const statusDate = parseDateInput(statusDateValue);
+      const effectiveDate = parseDateInput(effectiveDateValue);
+
+      if (!statusDate || !effectiveDate) {
+        return {
+          valid: false,
+          amount: 0,
+          days: 0,
+          months: 0,
+          startDate: null,
+          endDate: null,
+          prescriptionApplied: false,
+          note: 'Ingresa fecha de estatus y fecha de efectividad para calcular el retroactivo.'
+        };
+      }
+
+      if (effectiveDate <= statusDate) {
+        return {
+          valid: true,
+          amount: 0,
+          days: 0,
+          months: 0,
+          startDate: statusDate,
+          endDate: effectiveDate,
+          prescriptionApplied: false,
+          note: 'La fecha de efectividad debe ser posterior a la fecha de estatus para generar retroactivo.'
+        };
+      }
+
+      const prescriptionLimit = subtractYears(effectiveDate, 3);
+      let recognizedStart = statusDate;
+      let prescriptionApplied = false;
+
+      if (applyPrescription && statusDate < prescriptionLimit) {
+        recognizedStart = prescriptionLimit;
+        prescriptionApplied = true;
+      }
+
+      const days = diffDays(recognizedStart, effectiveDate);
+      const months = days / 30.4375;
+      const amount = monthlyPension * months;
+
+      return {
+        valid: true,
+        amount,
+        days,
+        months,
+        startDate: recognizedStart,
+        originalStartDate: statusDate,
+        endDate: effectiveDate,
+        prescriptionApplied,
+        note: prescriptionApplied
+          ? `Se aplicó prescripción: el cálculo inicia el ${formatDate(recognizedStart)}, no desde el estatus original del ${formatDate(statusDate)}.`
+          : `Se calcula desde el estatus del ${formatDate(statusDate)} hasta el ${formatDate(effectiveDate)}.`
+      };
+    }
+
+    function getRequiredAge(sex) {
+      return sex === 'mujer' ? 57 : 62;
+    }
+
+    function getMinimumWeeksStandardByYear(year) {
+      if (year <= 2004) return 1000;
+      if (year === 2005) return 1050;
+      if (year >= 2006 && year <= 2015) return 1075 + ((year - 2006) * 25);
+      return 1300;
+    }
+
+    function getMinimumWeeksC197(year, sex, applyC197) {
+      const standardWeeks = getMinimumWeeksStandardByYear(year);
+      const shouldApplyC197 = applyC197 && sex === 'mujer' && year >= 2026;
+
+      if (!shouldApplyC197) {
+        return {
+          weeks: standardWeeks,
+          applied: false,
+          note: 'Regla general de semanas mínimas.'
+        };
+      }
+
+      if (year === 2026) {
+        return {
+          weeks: 1250,
+          applied: true,
+          note: 'Sentencia C-197 de 2023: reducción inicial de 50 semanas para mujeres desde 2026.'
+        };
+      }
+
+      const reducedWeeks = Math.max(1000, 1250 - ((year - 2026) * 25));
+      return {
+        weeks: reducedWeeks,
+        applied: true,
+        note: 'Sentencia C-197 de 2023: reducción gradual de 25 semanas por año desde 2027 hasta llegar a 1.000.'
+      };
+    }
+
+    function getMinimumWeeksByRule(year, sex, selectedRule, applyC197) {
+      if (selectedRule === '100') {
+        return {
+          weeks: 1000,
+          applied: false,
+          note: 'Regla histórica de la Ley 100 de 1993.'
+        };
+      }
+
+      return getMinimumWeeksC197(year, sex, applyC197);
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
+    function percent(value) {
+      return `${numberFormatter.format(value)}%`;
+    }
+
+    function addBreakdown(rows) {
+      breakdown.innerHTML = rows.map(row => `
+        <div class="breakdown-row">
+          <span>${row.label}</span>
+          <span>${row.value}</span>
+        </div>
+      `).join('');
+    }
+
+    function setStatus(type, message) {
+      statusBox.className = `status ${type}`;
+      statusBox.textContent = message;
+    }
+
+    function calculateLey100(ibl, smmlv, weeks, minWeeksInfo, applyMinimum) {
+      const minWeeks = minWeeksInfo.weeks;
+      const s = smmlv > 0 ? ibl / smmlv : 0;
+      const extraTo1200 = Math.floor(Math.min(Math.max(weeks - 1000, 0), 200) / 50);
+      const extraTo1400 = Math.floor(Math.min(Math.max(weeks - 1200, 0), 200) / 50);
+      const increment = (extraTo1200 * 2) + (extraTo1400 * 3);
+      const baseRate = 65;
+      const beforeCap = baseRate + increment;
+      const cap = 85;
+      const appliedRate = Math.min(beforeCap, cap);
+      const pensionBeforeMinimum = ibl * (appliedRate / 100);
+      const pensionAfterMinimum = applyMinimum ? Math.max(pensionBeforeMinimum, smmlv) : pensionBeforeMinimum;
+      const missingWeeks = Math.max(minWeeks - weeks, 0);
+
+      return {
+        minWeeks,
+        s,
+        baseRate,
+        increment,
+        blocks: extraTo1200 + extraTo1400,
+        beforeCap,
+        cap,
+        appliedRate,
+        pensionBeforeMinimum,
+        pensionAfterMinimum,
+        missingWeeks,
+        rows: [
+          { label: 'Regla aplicada', value: 'Ley 100 de 1993' },
+          { label: 'Porcentaje base', value: percent(baseRate) },
+          { label: 'Semanas mínimas usadas', value: integerFormatter.format(minWeeks) },
+          { label: 'Bloques adicionales hasta 1.200 semanas', value: `${extraTo1200} × 2%` },
+          { label: 'Bloques adicionales entre 1.200 y 1.400 semanas', value: `${extraTo1400} × 3%` },
+          { label: 'Porcentaje antes de tope', value: percent(beforeCap) },
+          { label: 'Tope aplicado', value: percent(cap) },
+          { label: 'Mesada antes de pensión mínima', value: moneyFormatter.format(pensionBeforeMinimum) }
+        ]
+      };
+    }
+
+    function calculateLey797(ibl, smmlv, weeks, year, minWeeksInfo, applyMinimum) {
+      const minWeeks = minWeeksInfo.weeks;
+      const s = smmlv > 0 ? ibl / smmlv : 0;
+      const rawBaseRate = 65.5 - (0.5 * s);
+      const baseRate = clamp(rawBaseRate, 55, 65);
+      const additionalWeeks = Math.max(weeks - minWeeks, 0);
+      const blocks = Math.floor(additionalWeeks / 50);
+      const increment = blocks * 1.5;
+      const beforeCap = baseRate + increment;
+      const incomeAdjustedCap = Math.min(80, baseRate + 15);
+      const appliedRate = Math.min(beforeCap, incomeAdjustedCap, 80);
+      const pensionBeforeMinimum = ibl * (appliedRate / 100);
+      const pensionAfterMinimum = applyMinimum ? Math.max(pensionBeforeMinimum, smmlv) : pensionBeforeMinimum;
+      const missingWeeks = Math.max(minWeeks - weeks, 0);
+
+      return {
+        minWeeks,
+        s,
+        rawBaseRate,
+        baseRate,
+        increment,
+        blocks,
+        beforeCap,
+        cap: incomeAdjustedCap,
+        appliedRate,
+        pensionBeforeMinimum,
+        pensionAfterMinimum,
+        missingWeeks,
+        rows: [
+          { label: 'Regla aplicada', value: `Ley 797 de 2003 · año ${year}` },
+          { label: 'Semanas mínimas usadas', value: integerFormatter.format(minWeeks) },
+          { label: 'Fundamento de semanas', value: minWeeksInfo.note },
+          { label: 's = IBL / SMMLV', value: numberFormatter.format(s) },
+          { label: 'r = 65.50 - 0.50s', value: percent(rawBaseRate) },
+          { label: 'Porcentaje base aplicado', value: percent(baseRate) },
+          { label: 'Bloques completos de 50 semanas adicionales', value: String(blocks) },
+          { label: 'Incremento por semanas adicionales', value: percent(increment) },
+          { label: 'Porcentaje antes de tope', value: percent(beforeCap) },
+          { label: 'Tope máximo estimado', value: percent(incomeAdjustedCap) },
+          { label: 'Mesada antes de pensión mínima', value: moneyFormatter.format(pensionBeforeMinimum) }
+        ]
+      };
+    }
+
+    function calculate(event) {
+      if (event) event.preventDefault();
+
+      const selectedRule = regla.value;
+      const year = Number(yearInput.value) || 2026;
+      const sex = sexInput.value;
+      const age = Number(ageInput.value) || 0;
+      const ibl = cleanMoney(iblInput.value);
+      const smmlv = cleanMoney(smmlvInput.value);
+      const weeks = Number(weeksInput.value) || 0;
+      const statusDateValue = statusDateInput.value;
+      const effectiveDateValue = effectiveDateInput.value;
+      const applyPrescription = applyPrescriptionInput.checked;
+      const applyC197 = applyC197Input.checked;
+      const applyMinimum = applyMinimumInput.checked;
+      const minWeeksInfo = getMinimumWeeksByRule(year, sex, selectedRule, applyC197);
+      const ageRequirement = getRequiredAge(sex);
+      const missingAge = Math.max(ageRequirement - age, 0);
+
+      if (ibl <= 0 || smmlv <= 0) {
+        setStatus('danger', 'Debes ingresar un IBL y un salario mínimo válidos para calcular.');
+        return;
+      }
+
+      const result = selectedRule === '797'
+        ? calculateLey797(ibl, smmlv, weeks, year, minWeeksInfo, applyMinimum)
+        : calculateLey100(ibl, smmlv, weeks, minWeeksInfo, applyMinimum);
+
+      const meetsWeeks = result.missingWeeks === 0;
+      const meetsAge = missingAge === 0;
+      const acquiresStatus = meetsWeeks && meetsAge;
+
+      const retroactive = calculateRetroactive(result.pensionAfterMinimum, statusDateValue, effectiveDateValue, applyPrescription);
+
+      finalPension.textContent = moneyFormatter.format(result.pensionAfterMinimum);
+      finalRetroactive.textContent = moneyFormatter.format(retroactive.amount);
+      retroactiveDisclaimer.textContent = retroactive.valid
+        ? `${retroactive.note} Valor aproximado: puede variar por prescripción, mesadas adicionales, descuentos de salud, intereses, fecha exacta de pago o decisión administrativa/judicial.`
+        : 'El retroactivo es una aproximación. Ingresa fechas válidas para calcularlo. El valor puede variar por prescripción, mesadas adicionales, descuentos, intereses o revisión de la historia laboral.';
+      finalRate.textContent = percent(result.appliedRate);
+      minimumWeeks.textContent = integerFormatter.format(result.minWeeks);
+      minimumWeeksNote.textContent = selectedRule === '797'
+        ? `${minWeeksInfo.note}`
+        : 'Referencia histórica de la Ley 100.';
+      requiredAge.textContent = `${ageRequirement} años`;
+      ageNote.textContent = missingAge > 0
+        ? `Faltan ${integerFormatter.format(missingAge)} año(s) para cumplir edad.`
+        : 'Cumple el requisito de edad.';
+      sValue.textContent = numberFormatter.format(result.s);
+      incrementRate.textContent = percent(result.increment);
+      blocksNote.textContent = `${result.blocks} bloque(s) completo(s) de 50 semanas.`;
+      rateNote.textContent = `Antes del tope: ${percent(result.beforeCap)}. Tope usado: ${percent(result.cap)}.`;
+      missingWeeksMetric.textContent = integerFormatter.format(result.missingWeeks);
+      missingWeeksNote.textContent = result.missingWeeks > 0
+        ? `Faltan ${integerFormatter.format(result.missingWeeks)} semana(s).`
+        : 'Cumple el requisito de semanas.';
+      retroactivePeriod.textContent = `${numberFormatter.format(retroactive.months)} meses`;
+      retroactivePeriodNote.textContent = retroactive.valid
+        ? `${integerFormatter.format(retroactive.days)} día(s) reconocidos para retroactivo.`
+        : 'Fechas pendientes o inválidas.';
+      prescriptionStatus.textContent = retroactive.prescriptionApplied ? 'Aplicada' : 'No aplicada';
+      prescriptionNote.textContent = applyPrescription
+        ? 'Se revisó el límite de 3 años hacia atrás desde la fecha de efectividad.'
+        : 'No se limitó el retroactivo por prescripción.';
+
+      const statusRows = [
+        { label: 'Sexo seleccionado', value: sex === 'mujer' ? 'Mujer' : 'Hombre' },
+        { label: 'Edad ingresada', value: `${integerFormatter.format(age)} años` },
+        { label: 'Edad mínima exigida', value: `${ageRequirement} años` },
+        { label: 'Cumple edad', value: meetsAge ? 'Sí' : 'No' },
+        { label: 'Cumple semanas', value: meetsWeeks ? 'Sí' : 'No' },
+        { label: 'Estatus por edad y semanas', value: acquiresStatus ? 'Cumple requisitos' : 'No cumple todavía' },
+        { label: 'Fecha de estatus pensional', value: retroactive.originalStartDate ? formatDate(retroactive.originalStartDate) : 'No indicada' },
+        { label: 'Fecha de efectividad o pago', value: retroactive.endDate ? formatDate(retroactive.endDate) : 'No indicada' },
+        { label: 'Fecha inicial reconocida para retroactivo', value: retroactive.startDate ? formatDate(retroactive.startDate) : 'No aplica' },
+        { label: 'Prescripción de 3 años', value: retroactive.prescriptionApplied ? 'Sí, cambia el valor' : 'No aplicada al periodo ingresado' },
+        { label: 'Días reconocidos para retroactivo', value: integerFormatter.format(retroactive.days) },
+        { label: 'Meses equivalentes estimados', value: numberFormatter.format(retroactive.months) },
+        { label: 'Retroactivo pensional estimado', value: moneyFormatter.format(retroactive.amount) }
+      ];
+
+      const minimumRow = applyMinimum
+        ? [{ label: 'Mesada final con pensión mínima', value: moneyFormatter.format(result.pensionAfterMinimum) }]
+        : [{ label: 'Mesada final sin ajuste de pensión mínima', value: moneyFormatter.format(result.pensionAfterMinimum) }];
+
+      addBreakdown([...statusRows, ...result.rows, ...minimumRow]);
+
+      if (acquiresStatus) {
+        pensionStatus.textContent = 'Cumple requisitos para causar pensión de vejez';
+        pensionStatusNote.textContent = 'Con los datos ingresados, la persona cumple simultáneamente la edad mínima y las semanas mínimas requeridas.';
+      } else if (!meetsAge && !meetsWeeks) {
+        pensionStatus.textContent = 'No cumple edad ni semanas';
+        pensionStatusNote.textContent = `Faltan ${integerFormatter.format(missingAge)} año(s) y ${integerFormatter.format(result.missingWeeks)} semana(s) para cumplir ambos requisitos.`;
+      } else if (!meetsAge) {
+        pensionStatus.textContent = 'Cumple semanas, pero no edad';
+        pensionStatusNote.textContent = `Faltan ${integerFormatter.format(missingAge)} año(s) para cumplir la edad mínima de ${ageRequirement} años.`;
+      } else {
+        pensionStatus.textContent = 'Cumple edad, pero no semanas';
+        pensionStatusNote.textContent = `Faltan ${integerFormatter.format(result.missingWeeks)} semana(s) para cumplir el requisito mínimo de cotización.`;
+      }
+
+      if (!acquiresStatus) {
+        setStatus('danger', 'La persona todavía no causa el derecho porque no cumple simultáneamente edad y semanas. La mesada mostrada es solo una simulación matemática.');
+      } else if (applyMinimum && result.pensionAfterMinimum > result.pensionBeforeMinimum) {
+        setStatus('warning', 'Cumple edad y semanas, pero la mesada calculada quedó por debajo de la pensión mínima; por eso se ajustó al SMMLV ingresado.');
+      } else {
+        setStatus('success', 'Cálculo realizado. La persona cumple edad y semanas para causar el derecho a la pensión de vejez.');
+      }
+    }
+
+    [iblInput, smmlvInput].forEach(input => {
+      input.addEventListener('blur', () => formatMoneyInput(input));
+      input.addEventListener('focus', () => {
+        input.value = cleanMoney(input.value) || '';
+      });
+    });
+
+    regla.addEventListener('change', () => {
+      yearField.classList.toggle('hidden', regla.value !== '797');
+      calculate();
+    });
+
+    form.addEventListener('submit', calculate);
+
+    [yearInput, sexInput, ageInput, weeksInput, statusDateInput, effectiveDateInput, applyPrescriptionInput, applyC197Input, applyMinimumInput].forEach(input => {
+      input.addEventListener('input', calculate);
+      input.addEventListener('change', calculate);
+    });
+
+    resetBtn.addEventListener('click', () => {
+      regla.value = '797';
+      yearInput.value = '2026';
+      sexInput.value = 'mujer';
+      ageInput.value = '57';
+      iblInput.value = '3500000';
+      smmlvInput.value = '1750905';
+      weeksInput.value = '1250';
+      statusDateInput.value = '2026-01-01';
+      effectiveDateInput.value = '2026-05-07';
+      applyPrescriptionInput.checked = true;
+      applyC197Input.checked = true;
+      applyMinimumInput.checked = true;
+      yearField.classList.remove('hidden');
+      calculate();
+    });
+
+    formatMoneyInput(iblInput);
+    formatMoneyInput(smmlvInput);
+    calculate();
+  </script>
+</body>
+</html>
