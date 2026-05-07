@@ -29,6 +29,8 @@
     body {
       margin: 0;
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 18px;
+      line-height: 1.55;
       background:
         radial-gradient(circle at top left, rgba(15, 118, 110, 0.16), transparent 34%),
         linear-gradient(180deg, #f7faff 0%, var(--bg) 52%, #edf3fa 100%);
@@ -37,7 +39,7 @@
     }
 
     .page {
-      width: min(1180px, calc(100% - 32px));
+      width: min(1080px, calc(100% - 28px));
       margin: 0 auto;
       padding: 34px 0 54px;
     }
@@ -63,7 +65,7 @@
     }
 
     .hero-main {
-      padding: 34px;
+      padding: 38px;
       position: relative;
       overflow: hidden;
     }
@@ -95,7 +97,7 @@
 
     h1 {
       margin: 0;
-      font-size: clamp(30px, 4.5vw, 54px);
+      font-size: clamp(32px, 4.2vw, 50px);
       line-height: 0.98;
       letter-spacing: -0.045em;
       max-width: 850px;
@@ -104,8 +106,8 @@
     .subtitle {
       margin: 18px 0 0;
       color: var(--muted);
-      font-size: 17px;
-      line-height: 1.6;
+      font-size: 20px;
+      line-height: 1.65;
       max-width: 760px;
     }
 
@@ -204,26 +206,62 @@
     }
 
     .panel {
-      padding: 24px;
+      padding: 30px;
     }
 
     .panel h2,
     .result-card h2,
     .law-box h2 {
       margin: 0 0 8px;
-      font-size: 22px;
+      font-size: 26px;
       letter-spacing: -0.02em;
     }
 
     .panel-description {
-      color: var(--muted);
-      line-height: 1.55;
-      margin: 0 0 22px;
+      color: #475569;
+      line-height: 1.6;
+      margin: 0 0 18px;
+      font-size: 18px;
+    }
+
+    .senior-guide {
+      display: grid;
+      gap: 10px;
+      margin: 0 0 24px;
+      padding: 18px;
+      border-radius: 18px;
+      border: 2px solid #bbf7d0;
+      background: #f0fdf4;
+      color: #14532d;
+      font-weight: 750;
+    }
+
+    .senior-guide strong {
+      font-size: 20px;
+    }
+
+    .senior-guide p {
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .step-label {
+      display: inline-flex;
+      width: fit-content;
+      margin-bottom: 2px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #dcfce7;
+      color: #14532d;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
     }
 
     .form-grid {
       display: grid;
-      gap: 16px;
+      gap: 20px;
     }
 
     .field {
@@ -232,18 +270,18 @@
     }
 
     label {
-      font-weight: 800;
-      font-size: 14px;
+      font-weight: 900;
+      font-size: 18px;
       color: #243045;
     }
 
     input,
     select {
       width: 100%;
-      border: 1px solid var(--line);
-      border-radius: 15px;
-      padding: 14px 14px;
-      font-size: 16px;
+      border: 2px solid var(--line);
+      border-radius: 16px;
+      padding: 17px 16px;
+      font-size: 20px;
       color: var(--ink);
       background: #ffffff;
       outline: none;
@@ -258,29 +296,29 @@
 
     .hint {
       color: var(--muted);
-      font-size: 12.5px;
-      line-height: 1.45;
+      font-size: 19px;
+      line-height: 1.55;
     }
 
     .row-2 {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      grid-template-columns: 1fr;
+      gap: 18px;
     }
 
     .checkbox-line {
       display: flex;
       align-items: flex-start;
       gap: 10px;
-      padding: 13px;
-      border: 1px solid var(--line);
+      padding: 16px;
+      border: 2px solid var(--line);
       border-radius: 16px;
       background: #fbfdff;
     }
 
     .checkbox-line input {
-      width: 18px;
-      height: 18px;
+      width: 24px;
+      height: 24px;
       margin-top: 2px;
       accent-color: var(--primary);
     }
@@ -300,8 +338,8 @@
     button {
       border: 0;
       border-radius: 16px;
-      padding: 14px 18px;
-      font-weight: 800;
+      padding: 18px 24px;
+      font-weight: 900;
       cursor: pointer;
       transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
       font-size: 15px;
@@ -329,18 +367,19 @@
     }
 
     .result-card {
-      padding: 24px;
+      padding: 30px;
     }
 
     .status {
       display: flex;
       align-items: flex-start;
       gap: 12px;
-      padding: 14px;
-      border-radius: 16px;
-      margin: 16px 0;
-      line-height: 1.5;
-      font-weight: 700;
+      padding: 18px;
+      border-radius: 18px;
+      margin: 18px 0;
+      line-height: 1.55;
+      font-weight: 850;
+      font-size: 18px;
     }
 
     .status.success { background: var(--success-bg); color: #0b5f46; }
@@ -366,7 +405,7 @@
     }
 
     .status-card strong {
-      font-size: 23px;
+      font-size: 28px;
       letter-spacing: -0.025em;
     }
 
@@ -401,7 +440,7 @@
       border: 1px solid #f4d88b;
       color: #755000;
       line-height: 1.5;
-      font-size: 13.5px;
+      font-size: 16px;
       font-weight: 650;
     }
 
@@ -412,7 +451,7 @@
     }
 
     .big-number strong {
-      font-size: clamp(28px, 5vw, 44px);
+      font-size: clamp(34px, 5vw, 48px);
       letter-spacing: -0.045em;
     }
 
@@ -424,7 +463,7 @@
     }
 
     .metric {
-      border: 1px solid var(--line);
+      border: 2px solid var(--line);
       background: #fbfdff;
       border-radius: 18px;
       padding: 14px;
@@ -434,8 +473,8 @@
     .metric span {
       display: block;
       color: var(--muted);
-      font-size: 12px;
-      font-weight: 800;
+      font-size: 14px;
+      font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       margin-bottom: 8px;
@@ -443,7 +482,7 @@
 
     .metric strong {
       display: block;
-      font-size: 22px;
+      font-size: 26px;
       letter-spacing: -0.025em;
     }
 
@@ -591,12 +630,17 @@
       <section class="panel">
         <h2>Datos para el cálculo</h2>
         <p class="panel-description">
-          La regla “desde 2004” usa la fórmula r = 65.50 - 0.50s y el incremento de 1.5% por cada 50 semanas adicionales a las mínimas requeridas.
+          Complete los datos con calma. La calculadora le dirá si ya cumple edad y semanas, cuál sería la mesada aproximada y cuánto podría ser el retroactivo.
         </p>
+        <div class="senior-guide">
+          <strong>Guía sencilla</strong>
+          <p>1. Escriba su edad y semanas cotizadas. 2. Ingrese el IBL y el salario mínimo. 3. Revise el resultado en la parte derecha.</p>
+        </div>
 
         <form id="pensionForm" class="form-grid">
           <div class="field">
-            <label for="regla">Regla normativa</label>
+            <span class="step-label">Paso 1</span>
+            <label for="regla">Seleccione la regla de cálculo</label>
             <select id="regla">
               <option value="797" selected>Ley 797 de 2003 · Regla aplicable desde 2004</option>
               <option value="100">Ley 100 de 1993 · Regla histórica de 1.000 a 1.400 semanas</option>
@@ -605,14 +649,16 @@
           </div>
 
           <div id="yearField" class="field">
-            <label for="year">Año de causación o reconocimiento</label>
+            <span class="step-label">Paso 2</span>
+            <label for="year">Año en que se reconoce o se causa la pensión</label>
             <input id="year" type="number" min="2004" max="2100" step="1" value="2026" />
             <div class="hint">Sirve para determinar las semanas mínimas y aplicar, cuando corresponda, la reducción gradual de la Sentencia C-197 de 2023.</div>
           </div>
 
           <div class="row-2">
             <div class="field">
-              <label for="sex">Sexo para edad y semanas</label>
+              <span class="step-label">Paso 3</span>
+              <label for="sex">Sexo para revisar edad y semanas</label>
               <select id="sex">
                 <option value="mujer" selected>Mujer</option>
                 <option value="hombre">Hombre</option>
@@ -621,7 +667,8 @@
             </div>
 
             <div class="field">
-              <label for="age">Edad cumplida</label>
+              <span class="step-label">Paso 4</span>
+              <label for="age">Edad actual o edad cumplida</label>
               <input id="age" type="number" min="0" max="120" step="1" value="57" />
               <div class="hint">Se usa para determinar si ya se causa el derecho por edad.</div>
             </div>
@@ -629,19 +676,22 @@
 
           <div class="row-2">
             <div class="field">
+              <span class="step-label">Paso 5</span>
               <label for="ibl">Ingreso Base de Liquidación - IBL</label>
               <input id="ibl" type="text" inputmode="numeric" value="3500000" />
               <div class="hint">Valor mensual en pesos colombianos.</div>
             </div>
 
             <div class="field">
-              <label for="smmlv">SMMLV del año de referencia</label>
+              <span class="step-label">Paso 6</span>
+              <label for="smmlv">Salario mínimo del año</label>
               <input id="smmlv" type="text" inputmode="numeric" value="1750905" />
               <div class="hint">Para 2026 se deja precargado $1.750.905. Puedes cambiarlo.</div>
             </div>
           </div>
 
           <div class="field">
+            <span class="step-label">Paso 7</span>
             <label for="weeks">Total de semanas cotizadas</label>
             <input id="weeks" type="number" min="0" step="1" value="1250" />
             <div class="hint">El incremento de la mesada solo cuenta por bloques completos de 50 semanas adicionales.</div>
@@ -649,13 +699,15 @@
 
           <div class="row-2">
             <div class="field">
-              <label for="statusDate">Fecha de estatus pensional</label>
+              <span class="step-label">Paso 8</span>
+              <label for="statusDate">Fecha en que cumplió edad y semanas</label>
               <input id="statusDate" type="date" value="2026-01-01" />
               <div class="hint">Fecha desde la cual la persona cumple edad y semanas. Desde aquí se estima el retroactivo.</div>
             </div>
 
             <div class="field">
-              <label for="effectiveDate">Fecha de efectividad o pago</label>
+              <span class="step-label">Paso 9</span>
+              <label for="effectiveDate">Fecha hasta la que quiere calcular el retroactivo</label>
               <input id="effectiveDate" type="date" value="2026-05-07" />
               <div class="hint">Fecha hasta la cual se liquida el retroactivo estimado. Puede ser reconocimiento, inclusión en nómina o pago efectivo, según el caso.</div>
             </div>
@@ -686,8 +738,8 @@
           </div>
 
           <div class="actions">
-            <button type="submit" class="primary-btn">Calcular pensión</button>
-            <button type="button" id="resetBtn" class="ghost-btn">Limpiar ejemplo</button>
+            <button type="submit" class="primary-btn">Calcular mi pensión</button>
+            <button type="button" id="resetBtn" class="ghost-btn">Volver al ejemplo</button>
           </div>
         </form>
       </section>
