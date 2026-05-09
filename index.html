@@ -554,9 +554,9 @@
 
           <div id="yearField" class="field">
             <span class="step-label">Paso 2</span>
-            <label for="year">Año de referencia</label>
+            <label for="year">Año del estatus pensional</label>
             <input id="year" type="number" min="2004" max="2100" step="1" value="2026" />
-            <div class="hint">Para Ley 797, el año sirve para determinar las semanas mínimas generales.</div>
+            <div class="hint">Este es el año en que la persona cumple o busca acreditar las semanas mínimas para pensionarse. En Ley 797 se usa para determinar cuántas semanas exige la norma.</div>
           </div>
 
           <div class="field">
@@ -844,7 +844,7 @@
       rateNote.textContent = `Antes del tope: ${percent(result.beforeCap)}.`;
       minimumWeeks.textContent = integerFormatter.format(result.minWeeks);
       minimumWeeksNote.textContent = selectedRule === '797'
-        ? `Semanas mínimas generales para el año ${year}.`
+        ? `Semanas mínimas generales para el año del estatus pensional: ${year}.`
         : 'Semanas mínimas usadas en la regla histórica.';
       missingWeeksMetric.textContent = integerFormatter.format(result.missingWeeks);
       missingWeeksNote.textContent = result.missingWeeks > 0
