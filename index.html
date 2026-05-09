@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Calculadora de pensión de vejez | Ley 100 y Ley 797</title>
+
   <style>
     :root {
       --bg: #f4f8f6;
@@ -46,9 +47,15 @@
       padding: 34px 0 54px;
     }
 
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+      align-items: start;
+    }
 
     .hero-main,
-    .hero-note,
     .panel,
     .result-card,
     .law-box {
@@ -60,7 +67,7 @@
     }
 
     .hero-main {
-      padding: 38px;
+      padding: 42px;
       position: relative;
       overflow: hidden;
     }
@@ -74,6 +81,12 @@
       background: rgba(15, 118, 110, 0.10);
       right: -80px;
       top: -85px;
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
     }
 
     .eyebrow {
@@ -92,6 +105,7 @@
       font-size: clamp(34px, 4.2vw, 50px);
       line-height: 1;
       letter-spacing: -0.045em;
+      max-width: 850px;
     }
 
     .subtitle {
@@ -99,83 +113,69 @@
       color: var(--muted);
       font-size: 20px;
       line-height: 1.65;
-      max-width: 760px;
+      max-width: 860px;
     }
 
-    .hero-note {
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
+    .merged-note {
+      margin-top: 32px;
+      padding-top: 28px;
+      border-top: 2px solid var(--line);
+      max-width: 900px;
     }
 
     .note-title {
       font-weight: 900;
-      font-size: 21px;
+      font-size: 25px;
       margin-bottom: 8px;
     }
 
     .note-text {
       color: var(--muted);
-      margin: 0;
+      margin: 0 0 18px;
       line-height: 1.55;
+      font-size: 18px;
     }
 
     .advisor-message {
-      margin-top: 16px;
-      padding: 18px;
-      border-radius: 20px;
+      padding: 22px;
+      border-radius: 22px;
       background: linear-gradient(135deg, #064e3b, #0f766e 58%, #10b981);
       color: #ffffff;
       box-shadow: 0 16px 35px rgba(15, 118, 110, 0.24);
+      max-width: 720px;
     }
 
     .advisor-message strong {
       display: block;
-      font-size: 19px;
+      font-size: 22px;
       line-height: 1.25;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
 
     .advisor-message p {
       margin: 0;
-      font-size: 15px;
-      line-height: 1.45;
-      opacity: 0.95;
+      font-size: 17px;
+      line-height: 1.5;
+      opacity: 0.96;
     }
 
     .gender-note {
-      margin-top: 10px !important;
+      margin-top: 12px !important;
       font-weight: 900;
       opacity: 1 !important;
     }
 
     .advisor-contact {
       display: inline-flex;
-      margin-top: 14px;
-      padding: 13px 15px;
-      border-radius: 14px;
+      margin-top: 18px;
+      padding: 15px 18px;
+      border-radius: 16px;
       background: rgba(255, 255, 255, 0.17);
       color: #ffffff;
       text-decoration: none;
       font-weight: 900;
       border: 1px solid rgba(255, 255, 255, 0.32);
-    }
-
-    .tag-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .tag {
-      background: #f8fafc;
-      border: 1px solid var(--line);
-      color: #334155;
-      border-radius: 999px;
-      padding: 8px 10px;
-      font-size: 13px;
-      font-weight: 800;
+      font-size: 18px;
     }
 
     .calculator {
@@ -315,6 +315,10 @@
       box-shadow: 0 12px 24px rgba(15, 118, 110, 0.25);
     }
 
+    .primary-btn:hover {
+      background: var(--primary-dark);
+    }
+
     .ghost-btn {
       background: #eef4fb;
       color: #20304a;
@@ -330,9 +334,20 @@
       font-size: 18px;
     }
 
-    .status.success { background: var(--success-bg); color: var(--success); }
-    .status.warning { background: var(--warning-bg); color: var(--warning); }
-    .status.danger { background: var(--danger-bg); color: var(--danger); }
+    .status.success {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .status.warning {
+      background: var(--warning-bg);
+      color: var(--warning);
+    }
+
+    .status.danger {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
 
     .big-number {
       display: grid;
@@ -473,7 +488,6 @@
     }
 
     @media (max-width: 880px) {
-      .hero,
       .calculator,
       .metrics,
       .law-grid {
@@ -486,92 +500,149 @@
       .law-box {
         padding: 24px;
       }
+
+      .advisor-message {
+        max-width: 100%;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="page">
     <header class="hero">
       <section class="hero-main">
-        <div class="eyebrow">Colombia · Ley 100 de 1993 / Ley 797 de 2003</div>
-        <h1>Calculadora básica de pensión de vejez</h1>
-        <p class="subtitle">
-          Calcula una mesada pensional aproximada con base en el IBL, las semanas cotizadas y la regla legal seleccionada.
-        </p>
-      </section>
+        <div class="hero-content">
+          <div class="eyebrow">Colombia · Ley 100 de 1993 / Ley 797 de 2003</div>
 
-      <aside class="hero-note">
-        <div>
-          <div class="note-title">Asesoría</div>
-          <p class="note-text">
-            Esta herramienta es orientativa. Para revisar un caso real conviene analizar la historia laboral y el régimen aplicable.
+          <h1>Calculadora básica de pensión de vejez</h1>
+
+          <p class="subtitle">
+            Calcula una mesada pensional aproximada con base en el IBL,
+            las semanas cotizadas y la regla legal seleccionada.
           </p>
-          <div class="advisor-message">
-            <strong>¿Necesitas asesoría para el reconocimiento o reliquidación de tu pensión o de tu indemnización?</strong>
-            <p>Revisa tu caso con acompañamiento especializado antes de presentar solicitudes, reclamaciones o recursos.</p>
-            <p class="gender-note">Asesorías con perspectiva de género.</p>
-            <a class="advisor-contact" href="https://wa.me/573167620709" target="_blank" rel="noopener noreferrer">Contáctanos: +57 316 7620709</a>
-          </div>
 
-      </aside>
+          <div class="merged-note">
+            <div class="note-title">Asesoría</div>
+
+            <p class="note-text">
+              Esta herramienta es orientativa. Para revisar un caso real conviene analizar
+              la historia laboral y el régimen aplicable.
+            </p>
+
+            <div class="advisor-message">
+              <strong>
+                ¿Necesitas asesoría para el reconocimiento o reliquidación de tu pensión o de tu indemnización?
+              </strong>
+
+              <p>
+                Revisa tu caso con acompañamiento especializado antes de presentar solicitudes,
+                reclamaciones o recursos.
+              </p>
+
+              <p class="gender-note">Asesorías con perspectiva de género.</p>
+
+              <a
+                class="advisor-contact"
+                href="https://wa.me/573167620709"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Contáctanos: +57 316 7620709
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
     </header>
 
     <main class="calculator">
       <section class="panel">
         <h2>Datos para calcular</h2>
+
         <p class="panel-description">
-          Complete los datos principales. La calculadora mostrará el porcentaje aplicado y la mesada aproximada.
+          Complete los datos principales. La calculadora mostrará el porcentaje aplicado
+          y la mesada aproximada.
         </p>
 
         <div class="senior-guide">
           <strong>Guía sencilla</strong>
-          <p>1. Seleccione Ley 100 o Ley 797. 2. Escriba el IBL y las semanas cotizadas. 3. Presione calcular.</p>
+          <p>
+            1. Seleccione Ley 100 o Ley 797. 2. Escriba el IBL y las semanas cotizadas.
+            3. Presione calcular.
+          </p>
         </div>
 
         <form id="pensionForm" class="form-grid">
           <div class="field">
             <span class="step-label">Paso 1</span>
             <label for="regla">Seleccione la regla de cálculo</label>
+
             <select id="regla">
               <option value="797" selected>Ley 797 de 2003 · Regla aplicable desde 2004</option>
               <option value="100">Ley 100 de 1993 · Regla histórica de 1.000 a 1.400 semanas</option>
             </select>
-            <div class="hint">La Ley 797 usa fórmula decreciente según el nivel de ingresos. La Ley 100 usa porcentajes por bloques de semanas.</div>
+
+            <div class="hint">
+              La Ley 797 usa fórmula decreciente según el nivel de ingresos.
+              La Ley 100 usa porcentajes por bloques de semanas.
+            </div>
           </div>
 
           <div id="yearField" class="field">
             <span class="step-label">Paso 2</span>
             <label for="year">Año del estatus pensional</label>
+
             <input id="year" type="number" min="2004" max="2100" step="1" value="2026" />
-            <div class="hint">Este es el año en que la persona cumple o busca acreditar las semanas mínimas para pensionarse. En Ley 797 se usa para determinar cuántas semanas exige la norma.</div>
+
+            <div class="hint">
+              Este es el año en que la persona cumple o busca acreditar las semanas mínimas
+              para pensionarse. En Ley 797 se usa para determinar cuántas semanas exige la norma.
+            </div>
           </div>
 
           <div class="field">
             <span class="step-label">Paso 3</span>
             <label for="ibl">Ingreso Base de Liquidación - IBL</label>
+
             <input id="ibl" type="text" inputmode="numeric" value="3500000" />
-            <div class="hint">Escriba el valor mensual en pesos colombianos.</div>
+
+            <div class="hint">
+              Escriba el valor mensual en pesos colombianos.
+            </div>
           </div>
 
           <div class="field">
             <span class="step-label">Paso 4</span>
             <label for="smmlv">Salario mínimo del año</label>
+
             <input id="smmlv" type="text" inputmode="numeric" value="1750905" />
-            <div class="hint">Este dato se usa para verificar la pensión mínima y calcular el IBL en salarios mínimos.</div>
+
+            <div class="hint">
+              Este dato se usa para verificar la pensión mínima y calcular el IBL en salarios mínimos.
+            </div>
           </div>
 
           <div class="field">
             <span class="step-label">Paso 5</span>
             <label for="weeks">Total de semanas cotizadas</label>
+
             <input id="weeks" type="number" min="0" step="1" value="1300" />
-            <div class="hint">Los incrementos se calculan por bloques completos de 50 semanas adicionales.</div>
+
+            <div class="hint">
+              Los incrementos se calculan por bloques completos de 50 semanas adicionales.
+            </div>
           </div>
 
           <div class="checkbox-line">
             <input id="applyMinimum" type="checkbox" checked />
+
             <div>
               <label for="applyMinimum">Aplicar pensión mínima</label>
-              <div class="hint">Si la mesada estimada queda por debajo de 1 salario mínimo, se ajusta al salario mínimo indicado.</div>
+              <div class="hint">
+                Si la mesada estimada queda por debajo de 1 salario mínimo,
+                se ajusta al salario mínimo indicado.
+              </div>
             </div>
           </div>
 
@@ -584,7 +655,10 @@
 
       <section class="result-card">
         <h2>Resultado estimado</h2>
-        <div id="statusBox" class="status warning">Ingrese los datos y presione calcular.</div>
+
+        <div id="statusBox" class="status warning">
+          Ingrese los datos y presione calcular.
+        </div>
 
         <div class="big-number">
           <span>Mesada pensional estimada</span>
@@ -597,26 +671,31 @@
             <strong id="finalRate">0%</strong>
             <small id="rateNote">Tasa final después de topes.</small>
           </div>
+
           <div class="metric">
             <span>Semanas mínimas</span>
             <strong id="minimumWeeks">0</strong>
             <small id="minimumWeeksNote">Según la regla seleccionada.</small>
           </div>
+
           <div class="metric">
             <span>Semanas faltantes</span>
             <strong id="missingWeeksMetric">0</strong>
             <small id="missingWeeksNote">Para cumplir el requisito mínimo.</small>
           </div>
+
           <div class="metric">
             <span>IBL en salarios mínimos</span>
             <strong id="sValue">0</strong>
             <small>s = IBL / salario mínimo.</small>
           </div>
+
           <div class="metric">
             <span>Incremento por semanas</span>
             <strong id="incrementRate">0%</strong>
             <small id="blocksNote">Bloques completos de 50 semanas.</small>
           </div>
+
           <div class="metric">
             <span>Tope aplicado</span>
             <strong id="capRate">0%</strong>
@@ -630,18 +709,31 @@
 
     <section class="law-box">
       <h2>Reglas implementadas</h2>
+
       <div class="law-grid">
         <article class="law-item">
           <strong>Ley 100 de 1993</strong>
-          <p>65% del IBL por las primeras 1.000 semanas. Por cada 50 semanas adicionales hasta 1.200 se suma 2%, y de 1.200 a 1.400 se suma 3%, con máximo de 85%.</p>
+          <p>
+            65% del IBL por las primeras 1.000 semanas. Por cada 50 semanas adicionales
+            hasta 1.200 se suma 2%, y de 1.200 a 1.400 se suma 3%, con máximo de 85%.
+          </p>
         </article>
+
         <article class="law-item">
           <strong>Ley 797 de 2003</strong>
-          <p>Desde 2004, el porcentaje base se calcula con la fórmula r = 65.50 - 0.50s. Desde 2005 se suma 1.5% por cada 50 semanas adicionales a las mínimas, con tope máximo.</p>
+          <p>
+            Desde 2004, el porcentaje base se calcula con la fórmula r = 65.50 - 0.50s.
+            Desde 2005 se suma 1.5% por cada 50 semanas adicionales a las mínimas,
+            con tope máximo.
+          </p>
         </article>
       </div>
+
       <div class="footer-warning">
-        Esta calculadora es una herramienta pedagógica y orientativa. No reemplaza una liquidación oficial. No valida régimen de transición, historia laboral completa, bonos pensionales, regímenes exceptuados, régimen de ahorro individual, descuentos, aportes a salud ni decisiones administrativas o judiciales.
+        Esta calculadora es una herramienta pedagógica y orientativa. No reemplaza una
+        liquidación oficial. No valida régimen de transición, historia laboral completa,
+        bonos pensionales, regímenes exceptuados, régimen de ahorro individual, descuentos,
+        aportes a salud ni decisiones administrativas o judiciales.
       </div>
     </section>
   </div>
@@ -726,19 +818,24 @@
     function calculateLey100(ibl, smmlv, weeks, applyMinimum) {
       const minWeeks = 1000;
       const s = smmlv > 0 ? ibl / smmlv : 0;
+
       const extraTo1200 = Math.floor(Math.min(Math.max(weeks - 1000, 0), 200) / 50);
       const extraTo1400 = Math.floor(Math.min(Math.max(weeks - 1200, 0), 200) / 50);
+
       const increment = (extraTo1200 * 2) + (extraTo1400 * 3);
       const baseRate = 65;
       const beforeCap = baseRate + increment;
       const cap = 85;
       const appliedRate = Math.min(beforeCap, cap);
+
       const pensionBeforeMinimum = ibl * (appliedRate / 100);
-      const pensionAfterMinimum = applyMinimum ? Math.max(pensionBeforeMinimum, smmlv) : pensionBeforeMinimum;
+      const pensionAfterMinimum = applyMinimum
+        ? Math.max(pensionBeforeMinimum, smmlv)
+        : pensionBeforeMinimum;
+
       const missingWeeks = Math.max(minWeeks - weeks, 0);
 
       return {
-        ruleName: 'Ley 100 de 1993',
         minWeeks,
         s,
         baseRate,
@@ -766,20 +863,26 @@
     function calculateLey797(ibl, smmlv, weeks, year, applyMinimum) {
       const minWeeks = getMinimumWeeksByYear(year);
       const s = smmlv > 0 ? ibl / smmlv : 0;
+
       const rawBaseRate = 65.5 - (0.5 * s);
       const baseRate = clamp(rawBaseRate, 55, 65);
+
       const additionalWeeks = Math.max(weeks - minWeeks, 0);
       const blocks = Math.floor(additionalWeeks / 50);
       const increment = blocks * 1.5;
+
       const beforeCap = baseRate + increment;
       const cap = Math.min(80, baseRate + 15);
       const appliedRate = Math.min(beforeCap, cap, 80);
+
       const pensionBeforeMinimum = ibl * (appliedRate / 100);
-      const pensionAfterMinimum = applyMinimum ? Math.max(pensionBeforeMinimum, smmlv) : pensionBeforeMinimum;
+      const pensionAfterMinimum = applyMinimum
+        ? Math.max(pensionBeforeMinimum, smmlv)
+        : pensionBeforeMinimum;
+
       const missingWeeks = Math.max(minWeeks - weeks, 0);
 
       return {
-        ruleName: `Ley 797 de 2003 · año ${year}`,
         minWeeks,
         s,
         rawBaseRate,
@@ -829,14 +932,17 @@
       finalPension.textContent = moneyFormatter.format(result.pensionAfterMinimum);
       finalRate.textContent = percent(result.appliedRate);
       rateNote.textContent = `Antes del tope: ${percent(result.beforeCap)}.`;
+
       minimumWeeks.textContent = integerFormatter.format(result.minWeeks);
       minimumWeeksNote.textContent = selectedRule === '797'
         ? `Semanas mínimas generales para el año del estatus pensional: ${year}.`
         : 'Semanas mínimas usadas en la regla histórica.';
+
       missingWeeksMetric.textContent = integerFormatter.format(result.missingWeeks);
       missingWeeksNote.textContent = result.missingWeeks > 0
         ? `Faltan ${integerFormatter.format(result.missingWeeks)} semana(s).`
         : 'Cumple el requisito mínimo de semanas.';
+
       sValue.textContent = numberFormatter.format(result.s);
       incrementRate.textContent = percent(result.increment);
       blocksNote.textContent = `${result.blocks} bloque(s) completo(s) de 50 semanas.`;
@@ -849,16 +955,26 @@
       addBreakdown([...result.rows, ...minimumRow]);
 
       if (result.missingWeeks > 0) {
-        setStatus('danger', 'Con los datos ingresados no se alcanzan las semanas mínimas. La mesada mostrada es solo una simulación matemática.');
+        setStatus(
+          'danger',
+          'Con los datos ingresados no se alcanzan las semanas mínimas. La mesada mostrada es solo una simulación matemática.'
+        );
       } else if (applyMinimum && result.pensionAfterMinimum > result.pensionBeforeMinimum) {
-        setStatus('warning', 'La mesada calculada quedó por debajo de la pensión mínima, por eso se ajustó al salario mínimo indicado.');
+        setStatus(
+          'warning',
+          'La mesada calculada quedó por debajo de la pensión mínima, por eso se ajustó al salario mínimo indicado.'
+        );
       } else {
-        setStatus('success', 'Cálculo realizado. Con los datos ingresados se alcanzan las semanas mínimas de la regla seleccionada.');
+        setStatus(
+          'success',
+          'Cálculo realizado. Con los datos ingresados se alcanzan las semanas mínimas de la regla seleccionada.'
+        );
       }
     }
 
     [iblInput, smmlvInput].forEach(input => {
       input.addEventListener('blur', () => formatMoneyInput(input));
+
       input.addEventListener('focus', () => {
         input.value = cleanMoney(input.value) || '';
       });
